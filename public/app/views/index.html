@@ -1,0 +1,16 @@
+<div class="row text-center">
+  <div class="col-md-12">
+    <h1>Course Tracker</h1>
+  </div>
+  <div class="col-md-offset-4 col-md-4">
+    <a class="btn btn-block btn-social btn-github"
+       ng-click="login()"
+       ng-hide="auth.isLoggedIn()">
+      <span class="fa fa-github"></span>
+      Sign in with Github
+    </a>
+    <a class="btn btn-primary" ng-show="auth.isLoggedIn()">Continue to Course Tracker</a>
+    <a class="btn btn-primary" href="/#/admin">Admin</a>
+    <a ng-click="addStudent()">Create cohort</a>
+  </div>
+</div>
