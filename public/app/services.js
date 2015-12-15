@@ -25,8 +25,11 @@ angular.module('CourseServices', ['firebase'])
   }
 }])
 .factory('Cohorts', ['$firebaseArray', function($firebaseArray) {
-  return $firebaseArray(new Firebase("https://coursetracker.firebaseio.com/cohorts"));
+  return new Firebase("https://coursetracker.firebaseio.com/cohorts");
 }])
 .factory('Students', ['$firebaseArray', function($firebaseArray) {
-  return $firebaseArray(new Firebase("https://coursetracker.firebaseio.com/students"));
+  return new Firebase("https://coursetracker.firebaseio.com/students");
+}])
+.factory('Users', ['$firebaseArray', function($firebaseArray) {
+  return new Firebase("https://coursetracker.firebaseio.com/users");
 }])
