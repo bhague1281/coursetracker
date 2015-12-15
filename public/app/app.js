@@ -18,6 +18,11 @@ angular.module('CourseTracker', ['CourseCtrls', 'ui.router'])
     templateUrl: 'app/views/dashboard.html',
     controller: 'DashboardCtrl'
   })
+  .state('attendance', {
+    url: '/attendance',
+    templateUrl: 'app/views/attendance.html',
+    controller: 'AttendanceCtrl'
+  })
   // .when('/', {
   //   templateUrl: 'app/views/index.html',
   //   controller: 'IndexCtrl'

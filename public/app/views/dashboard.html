@@ -1,1 +1,12 @@
-<h1>{{auth.getCurrentUser().displayName}}</h1>
+<h1>WDI 04</h1>
+
+<h2>Students to Track</h2>
+<div class="row">
+  <div class="col-md-3" ng-repeat="student in students | filter:{status: {track: 'true'}}">
+    <img class="avatar" ng-src="{{student.avatarUrl}}">
+    <h3>{{student.firstName}} {{student.lastName}}</h3>
+    <p ng-show="student.status && student.status.note">{{student.status.note}}</p>
+  </div>
+</div>
+
+<a href="/#/attendance" class="btn btn-primary">Attendance</a>

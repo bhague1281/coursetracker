@@ -1,4 +1,4 @@
-angular.module('CourseCtrls', ['CourseServices'])
+angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'angularMoment'])
 .controller('AuthCtrl', ['$scope', 'Auth', function($scope, Auth) {
   $scope.auth = Auth;
 
@@ -12,23 +12,28 @@ angular.module('CourseCtrls', ['CourseServices'])
 .controller('IndexCtrl', ['$scope', function($scope) {
   console.log('index');
 }])
-.controller('DashboardCtrl', ['$scope', 'Auth', function($scope, Auth) {
+.controller('DashboardCtrl', ['$scope', 'Auth', 'Students', '$firebaseArray', function($scope, Auth, Students, $firebaseArray) {
   $scope.auth = Auth;
+  $scope.students = [];
+  $scope.selectedCohort = 'WDI 04'
+  Students.getCohort($scope.selectedCohort, function(err, students) {
+    $scope.students = students;
+  });
   console.log('dashboard');
 }])
-.controller('AdminIndexCtrl', ['$scope', 'Cohorts', 'Students', 'Auth', '$http', '$firebaseArray', '$timeout', function($scope, Cohorts, Students, Auth, $http, $firebaseArray, $timeout) {
-  var loadStudents = function() {
-    Students.orderByChild('cohort').startAt($scope.selectedCohort).endAt($scope.selectedCohort).on("value", function(snapshot) {
-      $timeout(function() {
-        $scope.students = [];
-        snapshot.forEach(function(data) {
-          $scope.students.push(data.val());
-          console.log(data.val());
-        })
-      })
-    });
-  }
+.controller('AttendanceCtrl', ['$scope', 'Students', 'Attendance', function($scope, Students, Attendance) {
+  $scope.currentDate = new Date();
+  $scope.students = [];
+  $scope.attendance = ['thomasvaeth'];
+  Students.getCohort('WDI 04', function(err, students) {
+    $scope.students = students;
+  });
 
+  $scope.toggleAttendance = function(student) {
+    Attendance
+  }
+}])
+.controller('AdminIndexCtrl', ['$scope', 'Cohorts', 'Students', 'Auth', '$http', '$firebaseArray', function($scope, Cohorts, Students, Auth, $http, $firebaseArray) {
   $scope.cohorts = $firebaseArray(Cohorts);
   $scope.students = [];
   $scope.auth = Auth;
@@ -40,9 +45,15 @@ angular.module('CourseCtrls', ['CourseServices'])
   });
 
   $scope.$watch('selectedCohort', function() {
-    loadStudents();
-    console.log('students loaded');
+    Students.getCohort($scope.selectedCohort, function(err, students) {
+      $scope.students = students;
+      console.log('students loaded');
+    });
   });
+
+  $scope.changeSelectedCohort = function(idx) {
+    $scope.selectedCohort = $scope.cohorts.$keyAt(idx);
+  };
 
   $scope.newCohort = { name: '', description: '' };
   $scope.newStudent = { firstName: '', lastName: '', cohort: '', githubUsername: '', avatarUrl: '' };
@@ -63,14 +74,10 @@ angular.module('CourseCtrls', ['CourseServices'])
       }
       var student = {};
       student[$scope.newStudent.githubUsername] = $scope.newStudent
-      Students.update(student);
+      Students.ref.update(student);
       $scope.newStudent = { firstName: '', lastName: '', cohort: '' };
     }, function error(res) {
+      console.log(res);
     });
   };
-
-  $scope.changeSelectedCohort = function(idx) {
-    $scope.selectedCohort = $scope.cohorts.$keyAt(idx);
-    loadStudents();
-  }
 }])

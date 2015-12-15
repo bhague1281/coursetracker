@@ -4,6 +4,10 @@
   font-family: 'Lato', sans-serif;
 }
 
+.attended {
+  background-color: green;
+}
+
 .avatar {
   height: 100px;
 }

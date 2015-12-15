@@ -24,12 +24,41 @@ angular.module('CourseServices', ['firebase'])
     }
   }
 }])
-.factory('Cohorts', ['$firebaseArray', function($firebaseArray) {
+.factory('Cohorts', [function() {
   return new Firebase("https://coursetracker.firebaseio.com/cohorts");
 }])
-.factory('Students', ['$firebaseArray', function($firebaseArray) {
-  return new Firebase("https://coursetracker.firebaseio.com/students");
+.factory('Students', ['$timeout', function($timeout) {
+  return {
+    ref: new Firebase("https://coursetracker.firebaseio.com/students"),
+    getCohort: function(cohortName, callback) {
+      this.ref.orderByChild('cohort').startAt(cohortName).endAt(cohortName).on("value", function(snapshot) {
+        $timeout(function() {
+          var students = [];
+          snapshot.forEach(function(data) {
+            students.push(data.val());
+          });
+          callback(null, students);
+        });
+      });
+    }
+  }
 }])
-.factory('Users', ['$firebaseArray', function($firebaseArray) {
+.factory('Users', [function() {
   return new Firebase("https://coursetracker.firebaseio.com/users");
+}])
+.factory('Attendance', [function() {
+  return {
+    ref: new Firebase("https://coursetracker.firebaseio.com/attendance"),
+    getAttendanceByDate: function(date, callback) {
+      this.ref.orderByChild('date').startAt(date).endAt(date).on("value", function(snapshot) {
+        $timeout(function() {
+          var attendance = [];
+          snapshot.forEach(function(student) {
+            attendance.push(student.val());
+          });
+          callback(null, attendance);
+        });
+      });
+    }
+  }
 }])

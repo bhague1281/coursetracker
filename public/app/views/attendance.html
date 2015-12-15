@@ -1,0 +1,14 @@
+<h1>WDI 04 - Attendance</h1>
+
+<form>
+  <div class="form-group">
+    <label>Date</label>
+    <input class="form-control" type="date" ng-model="currentDate">
+  </div>
+</form>
+
+<div class="row">
+  <div class="col-md-3 well" ng-repeat="student in students" ng-class="{attended: attendance.indexOf(student.githubUsername) > -1}" ng-click="toggleAttendance(student)">
+    <student-card student="student" show-cohort="false"></student-card>
+  </div>
+</div>

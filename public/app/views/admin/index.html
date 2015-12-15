@@ -31,8 +31,7 @@
       </div>
     </form>
     <div class="well" ng-repeat="student in students | orderBy:'firstName' | filter:studentSearch">
-      <img class="avatar" ng-src="{{student.avatarUrl}}">
-      <h3>{{student.firstName}} {{student.lastName}} - <small>{{student.cohort}}</small></h3>
+      <student-card student="student"></student-card>
     </div>
   </div>
   <div class="col-md-3">
