@@ -9,73 +9,63 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
     });
   };
 }])
-.controller('IndexCtrl', ['$scope', function($scope) {
-  console.log('index');
-}])
-.controller('DashboardCtrl', ['$scope', 'Auth', 'Students', '$firebaseArray', function($scope, Auth, Students, $firebaseArray) {
-  $scope.auth = Auth;
+.controller('DashboardCtrl', ['$scope', 'Students', function($scope, Students) {
   $scope.students = [];
   $scope.selectedCohort = 'WDI 04'
 
   Students.getCohort($scope.selectedCohort, function(err, students) {
     $scope.students = students;
   });
-  console.log('dashboard');
 }])
 .controller('AttendanceCtrl', ['$scope', '$filter', 'Students', 'Attendance', '$firebaseArray', function($scope, $filter, Students, Attendance, $firebaseArray) {
   $scope.currentDate = new Date();
-  $filter('date')($scope.currentDate, 'MMddyyyy')
+  $scope.formattedDate = $filter('date')($scope.currentDate, 'MM-dd-yyyy')
   $scope.students = [];
-  $scope.attendance = ['thomasvaeth'];
+  $scope.selectedCohort = 'WDI 04'
 
-  Students.getCohort('WDI 04', function(err, students) {
+
+  Students.getCohort($scope.selectedCohort, function(err, students) {
     $scope.students = students;
   });
 
   $scope.toggleAttendance = function(githubUsername) {
     var obj = {};
     obj[githubUsername] = $scope.attended(githubUsername) ? false : true;
-    Attendance.ref.child('WDI 04').child($filter('date')($scope.currentDate, 'MM-dd-yyyy')).update(obj);
-    Attendance.ref.child('WDI 04').child($filter('date')($scope.currentDate, 'MM-dd-yyyy')).child('count').transaction(function(currentCount) {
+    Attendance.ref.child('WDI 04').child($scope.formattedDate).update(obj);
+    Attendance.ref.child('WDI 04').child($scope.formattedDate).child('count').transaction(function(currentCount) {
       return obj[githubUsername] ? currentCount+1 : currentCount-1;
     });
   }
 
   var attendance = [];
   $scope.$watch('currentDate', function() {
-    attendance = $firebaseArray(Attendance.ref.child('WDI 04').child($filter('date')($scope.currentDate, 'MM-dd-yyyy')));
+    attendance = $firebaseArray(Attendance.ref.child($scope.selectedCohort).child($scope.formattedDate));
   });
   $scope.attended = function(githubUsername) {
-    if (attendance.$getRecord(githubUsername)) {
-      return attendance.$getRecord(githubUsername).$value;
-    }
-    return false;
+    var attendanceRecord = attendance.$getRecord(githubUsername)
+    return attendanceRecord ? attendanceRecord.$value : false;
   }
 }])
 .controller('AdminIndexCtrl', ['$scope', 'Cohorts', 'Students', 'Auth', '$http', '$firebaseArray', function($scope, Cohorts, Students, Auth, $http, $firebaseArray) {
   $scope.cohorts = $firebaseArray(Cohorts);
   $scope.students = [];
-  $scope.auth = Auth;
   $scope.selectedCohort = false;
+  $scope.newCohort = { name: '', description: '' };
+  $scope.newStudent = { firstName: '', lastName: '', cohort: '', githubUsername: '', avatarUrl: '' };
 
   $scope.cohorts.$loaded().then(function(data) {
     $scope.selectedCohort = $scope.cohorts.$keyAt(0);
-    console.log($scope.selectedCohort);
   });
 
   $scope.$watch('selectedCohort', function() {
     Students.getCohort($scope.selectedCohort, function(err, students) {
       $scope.students = students;
-      console.log('students loaded');
     });
   });
 
   $scope.changeSelectedCohort = function(idx) {
     $scope.selectedCohort = $scope.cohorts.$keyAt(idx);
   };
-
-  $scope.newCohort = { name: '', description: '' };
-  $scope.newStudent = { firstName: '', lastName: '', cohort: '', githubUsername: '', avatarUrl: '' };
 
   $scope.addCohort = function() {
     var cohort = {};
