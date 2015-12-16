@@ -1,5 +1,3 @@
-@import url(https://fonts.googleapis.com/css?family=Lato:400,100);
-
 * {
   font-family: 'Lato', sans-serif;
 }
@@ -14,4 +12,24 @@
 
 .attendance-well {
   min-height: 260px;
+}
+
+/* alert animations */
+.alert {
+  margin-bottom: 0;
+}
+
+.alert.ng-enter {
+  animation: fadeInDown 1s;
+}
+
+.alert.ng-leave {
+  animation: fadeOutUp 1s;
+}
+/* end alert animations */
+
+.alerts {
+  position: absolute;
+  z-index: 1;
+  width: inherit;
 }

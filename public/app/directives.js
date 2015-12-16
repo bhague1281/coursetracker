@@ -21,16 +21,22 @@ angular.module('CourseTrackerDirectives', ['chart.js', 'CourseServices'])
     },
     controller: ['$scope', 'Attendance', '$firebaseArray', function($scope, Attendance, $firebaseArray) {
       // Attendance.ref.child('WDI 04').child()
-      var cohort = $firebaseArray(Attendance.ref.child($scope.cohort));
+      var attendanceRecords = $firebaseArray(Attendance.ref.child($scope.cohort));
       $scope.data = [[]];
       $scope.labels = [];
-      cohort.$loaded().then(function() {
-        cohort.forEach(function(item) {
+      $scope.series = ['Attendance'];
+      var updateAttendanceRecords = function() {
+        $scope.data[0] = [];
+        $scope.labels = [];
+        attendanceRecords.forEach(function(item) {
           $scope.data[0].push(item.count);
           $scope.labels.push(item.$id);
         });
+      };
+      attendanceRecords.$loaded().then(function() {
+        updateAttendanceRecords();
+        attendanceRecords.$watch(updateAttendanceRecords);
       });
-      $scope.series = ['Attendance'];
     }]
   }
 })

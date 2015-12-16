@@ -1,4 +1,4 @@
-angular.module('CourseTracker', ['CourseCtrls', 'ui.router'])
+angular.module('CourseTracker', ['CourseCtrls', 'ui.router', 'ngAnimate'])
 .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/');
 

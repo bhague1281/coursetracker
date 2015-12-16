@@ -57,7 +57,7 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
     return attendanceRecord ? attendanceRecord.$value : false;
   }
 }])
-.controller('AdminIndexCtrl', ['$scope', 'Cohorts', 'Students', 'Auth', '$http', '$firebaseArray', function($scope, Cohorts, Students, Auth, $http, $firebaseArray) {
+.controller('AdminIndexCtrl', ['$scope', 'Cohorts', 'Students', 'Auth', '$http', '$firebaseArray', '$uibModal', function($scope, Cohorts, Students, Auth, $http, $firebaseArray, $uibModal) {
   $scope.cohorts = $firebaseArray(Cohorts);
   $scope.students = [];
   $scope.selectedCohort = false;
@@ -103,4 +103,30 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
       $scope.alerts.add('danger', 'An error occurred, try again! (or check console)');
     });
   };
+
+  $scope.newCohortModal = function() {
+    $uibModal.open({
+      animation: true,
+      templateUrl: 'app/views/admin/newCohortModal.html',
+      controller: 'NewCohortCtrl'
+    });
+  };
+}])
+.controller('NewCohortCtrl', ['$scope', '$uibModalInstance', 'Cohorts', 'Alerts', function($scope, $uibModalInstance, Cohorts, Alerts) {
+  $scope.alerts = Alerts;
+  $scope.newCohort = { name: '', description: '' };
+
+  $scope.createCohort = function() {
+    var cohort = {};
+    cohort[$scope.newCohort.name] = $scope.newCohort;
+    Cohorts.update(cohort);
+    $scope.alerts.add('success', 'You added ' + $scope.newCohort.name + ' as a new cohort');
+    $scope.newCohort = { name: '', description: '' };
+
+    $uibModalInstance.dismiss('create');
+  }
+
+  $scope.cancel = function() {
+    $uibModalInstance.dismiss('cancel');
+  }
 }])

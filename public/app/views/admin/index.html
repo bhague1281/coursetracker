@@ -1,26 +1,15 @@
 <h1>Admin</h1>
+UID: {{auth.getCurrentUserUid()}}
 
 <div class="container" ng-show="auth.isLoggedIn()">
   <div class="col-md-3">
-    <h2>Cohorts</h2>
+    <h2>Cohorts <a ng-click="newCohortModal()" class="btn btn-success pull-right"><i class="fa fa-plus"></i></a></h2>
     <ul class="nav nav-pills nav-stacked">
       <li ng-repeat="cohort in cohorts"
           role="presentation"
           ng-class="{active: selectedCohort == cohort.$id}"
           ng-click="changeSelectedCohort($index)"><a>{{cohort.name}}</a></li>
     </ul>
-    <h3>New Cohort</h3>
-    <form ng-submit="addCohort()">
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input id="name" type="text" name="name" class="form-control" ng-model="newCohort.name">
-      </div>
-      <div class="form-group">
-        <label for="description">Description (coffee)</label>
-        <input id="description" type="text" name="description" class="form-control" ng-model="newCohort.description">
-      </div>
-      <input type="submit" class="btn btn-primary">
-    </form>
   </div>
   <div class="col-md-6">
     <h2>Students</h2>

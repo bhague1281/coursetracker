@@ -6,6 +6,10 @@ angular.module('CourseServices', ['firebase', 'ui.bootstrap'])
       var authData = this.authObj.$getAuth();
       return (authData && authData.github) ? authData.github : false;
     },
+    getCurrentUserUid: function() {
+      var authData = this.authObj.$getAuth();
+      return (this.getCurrentUser()) ? authData.uid : false;
+    },
     isLoggedIn: function() {
       return this.getCurrentUser() ? true : false;
     },
