@@ -16,25 +16,40 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
   $scope.auth = Auth;
   $scope.students = [];
   $scope.selectedCohort = 'WDI 04'
+
   Students.getCohort($scope.selectedCohort, function(err, students) {
     $scope.students = students;
   });
   console.log('dashboard');
 }])
-.controller('AttendanceCtrl', ['$scope', '$filter', 'Students', 'Attendance', function($scope, $filter, Students, Attendance) {
+.controller('AttendanceCtrl', ['$scope', '$filter', 'Students', 'Attendance', '$firebaseArray', function($scope, $filter, Students, Attendance, $firebaseArray) {
   $scope.currentDate = new Date();
   $filter('date')($scope.currentDate, 'MMddyyyy')
   $scope.students = [];
   $scope.attendance = ['thomasvaeth'];
+
   Students.getCohort('WDI 04', function(err, students) {
     $scope.students = students;
   });
 
   $scope.toggleAttendance = function(githubUsername) {
-    // Attendance
     var obj = {};
-    obj[githubUsername] = true;
-    Attendance.ref.child($filter('date')($scope.currentDate, 'MM-dd-yyyy')).update(obj);
+    obj[githubUsername] = $scope.attended(githubUsername) ? false : true;
+    Attendance.ref.child('WDI 04').child($filter('date')($scope.currentDate, 'MM-dd-yyyy')).update(obj);
+    Attendance.ref.child('WDI 04').child($filter('date')($scope.currentDate, 'MM-dd-yyyy')).child('count').transaction(function(currentCount) {
+      return obj[githubUsername] ? currentCount+1 : currentCount-1;
+    });
+  }
+
+  var attendance = [];
+  $scope.$watch('currentDate', function() {
+    attendance = $firebaseArray(Attendance.ref.child('WDI 04').child($filter('date')($scope.currentDate, 'MM-dd-yyyy')));
+  });
+  $scope.attended = function(githubUsername) {
+    if (attendance.$getRecord(githubUsername)) {
+      return attendance.$getRecord(githubUsername).$value;
+    }
+    return false;
   }
 }])
 .controller('AdminIndexCtrl', ['$scope', 'Cohorts', 'Students', 'Auth', '$http', '$firebaseArray', function($scope, Cohorts, Students, Auth, $http, $firebaseArray) {
