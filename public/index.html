@@ -53,25 +53,28 @@
         <div class="collapse navbar-collapse" id="navbar">
           <ul class="nav navbar-nav navbar-right" ng-show="auth.isLoggedIn()">
             <li><a>Hello {{auth.getCurrentUser().displayName}}</a></li>
+            <li><a href="/#/admin">Admin</a></li>
             <li><a ng-click="logout()">Logout</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
-      <div class="container">
-        <div class="alerts">
-          <uib-alert ng-repeat="alert in alerts.get()"
-                     type="{{alert.type}}"
-                     close="alerts.remove($index)"
-                     dismiss-on-timeout="2000"
-                     class="alert">{{alert.msg}}
-          </uib-alert>
-        </div>
+    <div class="container">
+      <div class="alerts">
+        <uib-alert ng-repeat="alert in alerts.get()"
+                   type="{{alert.type}}"
+                   close="alerts.remove($index)"
+                   dismiss-on-timeout="2000"
+                   class="alert">{{alert.msg}}
+        </uib-alert>
       </div>
+    </div>
     <div class="container">
       <div ui-view></div>
-      <div class="text-center">
-        Made with <i class="fa fa-heart"></i> at General Assembly Seattle
+      <div class="container footer">
+        <div class="text-center">
+          <p>Made with <i class="fa fa-heart"></i> at General Assembly Seattle</p>
+        </div>
       </div>
     </div>
   </body>

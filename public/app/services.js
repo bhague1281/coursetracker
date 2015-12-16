@@ -1,5 +1,5 @@
 angular.module('CourseServices', ['firebase', 'ui.bootstrap'])
-.factory('Auth', ['$firebaseAuth', function($firebaseAuth) {
+.factory('Auth', ['$firebaseAuth', 'Users', function($firebaseAuth, Users) {
   return {
     authObj: $firebaseAuth(new Firebase("https://coursetracker.firebaseio.com")),
     getCurrentUser: function() {

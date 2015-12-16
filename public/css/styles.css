@@ -33,3 +33,9 @@
   z-index: 1;
   width: inherit;
 }
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: inherit;
+}

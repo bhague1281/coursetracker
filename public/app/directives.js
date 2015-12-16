@@ -4,11 +4,13 @@ angular.module('CourseTrackerDirectives', ['chart.js', 'CourseServices'])
     restrict: 'E',
     scope: {
       student: '=',
-      showCohort: '='
+      showCohort: '=',
+      showNote: '='
     },
     templateUrl: 'app/views/directives/studentCard.html',
     controller: ['$scope', function($scope) {
       if (typeof $scope.showCohort === 'undefined') $scope.showCohort = true;
+      if (typeof $scope.showNote === 'undefined') $scope.showNote = false;
     }]
   }
 })

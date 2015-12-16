@@ -3,9 +3,9 @@
 <h2>Students to Track</h2>
 <div class="row">
   <div class="col-md-3" ng-repeat="student in students | filter:{status: {track: 'true'}}">
-    <img class="avatar" ng-src="{{student.avatarUrl}}">
-    <h3>{{student.firstName}} {{student.lastName}}</h3>
-    <p ng-show="student.status && student.status.note">{{student.status.note}}</p>
+    <student-card student="student"
+                  show-cohort="false"
+                  show-note="true"></student-card>
   </div>
 </div>
 <hr>

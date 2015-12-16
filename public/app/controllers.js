@@ -111,6 +111,14 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
       controller: 'NewCohortCtrl'
     });
   };
+
+  $scope.adminSettingsModal = function() {
+    $uibModal.open({
+      animation: true,
+      templateUrl: 'app/views/admin/adminSettingsModal.html',
+      controller: 'AdminSettingsCtrl'
+    })
+  }
 }])
 .controller('NewCohortCtrl', ['$scope', '$uibModalInstance', 'Cohorts', 'Alerts', function($scope, $uibModalInstance, Cohorts, Alerts) {
   $scope.alerts = Alerts;
@@ -129,4 +137,11 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
   $scope.cancel = function() {
     $uibModalInstance.dismiss('cancel');
   }
+}])
+.controller('AdminSettingsCtrl', ['$scope', '$uibModalInstance', 'Auth', function($scope, $uibModalInstance, Auth) {
+  $scope.uid = Auth.getCurrentUserUid();
+
+  $scope.close = function() {
+    $uibModalInstance.dismiss('close');
+  };
 }])
