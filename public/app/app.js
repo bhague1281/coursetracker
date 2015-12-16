@@ -5,7 +5,8 @@ angular.module('CourseTracker', ['CourseCtrls', 'ui.router', 'ngAnimate'])
   $stateProvider
   .state('index', {
     url: '/',
-    templateUrl: 'app/views/index.html'
+    templateUrl: 'app/views/index.html',
+    controller: 'IndexCtrl'
   })
   .state('admin', {
     url: '/admin',

@@ -1,22 +1,23 @@
 angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'angularMoment'])
-.controller('AuthCtrl', ['$scope', 'Auth', 'Alerts', function($scope, Auth, Alerts) {
+.controller('AuthCtrl', ['$scope', '$state', 'Auth', 'Alerts', function($scope, $state, Auth, Alerts) {
   $scope.auth = Auth;
   $scope.alerts = Alerts;
 
   $scope.login = function() {
     Auth.login(function(err, user) {
       if (err) {
-        return console.log('error');
-        console.log(err);
         $scope.alerts.add('danger', 'An error occurred!');
+        return console.log('error');
       }
       $scope.alerts.add('success', 'You are now logged in!');
+      $state.go('dashboard');
     });
   };
 
   $scope.logout = function() {
     Auth.logout();
     $scope.alerts.add('success', 'You are now logged out');
+    $state.go('index');
   }
 }])
 .controller('DashboardCtrl', ['$scope', 'Students', function($scope, Students) {
@@ -37,6 +38,11 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
     $scope.students = students;
   });
 
+  $scope.calendarOpen = false;
+  $scope.open = function($event) {
+    $scope.calendarOpen = true;
+  };
+
   $scope.toggleAttendance = function(githubUsername) {
     var obj = {};
     obj[githubUsername] = $scope.attended(githubUsername) ? false : true;
@@ -56,6 +62,9 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
     var attendanceRecord = attendance.$getRecord(githubUsername)
     return attendanceRecord ? attendanceRecord.$value : false;
   }
+}])
+.controller('IndexCtrl', ['$state', 'Auth', function($state, Auth) {
+  if (Auth.isLoggedIn()) $state.go('dashboard');
 }])
 .controller('AdminIndexCtrl', ['$scope', 'Cohorts', 'Students', 'Auth', '$http', '$firebaseArray', '$uibModal', function($scope, Cohorts, Students, Auth, $http, $firebaseArray, $uibModal) {
   $scope.cohorts = $firebaseArray(Cohorts);

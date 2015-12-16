@@ -15,11 +15,8 @@ angular.module('CourseServices', ['firebase', 'ui.bootstrap'])
     },
     login: function(callback) {
       this.authObj.$authWithOAuthPopup('github').then(function(authData) {
-        console.log('Logged in as:', authData.uid);
-        console.log(authData);
         callback(null, authData);
       }).catch(function(error) {
-        console.log('Authentication failed');
         callback({message: 'Authentication failed', error: error}, null);
       });
     },

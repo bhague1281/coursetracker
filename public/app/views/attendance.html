@@ -1,9 +1,18 @@
-<h1>WDI 04 - Attendance</h1>
+<h1>{{selectedCohort}} - Attendance </h1>
+
+<p>
+  Mark students <strong>green</strong> by pressing their face.
+</p>
 
 <form>
   <div class="form-group">
     <label>Date</label>
-    <input class="form-control" type="date" ng-model="currentDate">
+    <div class="input-group">
+      <input ng-click="open($event)" class="form-control" type="text" ng-model="currentDate" uib-datepicker-popup="MM/dd/yyyy" is-open="calendarOpen" ng-required="true" show-button-bar="false">
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+      </span>
+    </div>
   </div>
 </form>
 
