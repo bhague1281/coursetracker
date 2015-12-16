@@ -1,4 +1,4 @@
-angular.module('CourseServices', ['firebase'])
+angular.module('CourseServices', ['firebase', 'ui.bootstrap'])
 .factory('Auth', ['$firebaseAuth', function($firebaseAuth) {
   return {
     authObj: $firebaseAuth(new Firebase("https://coursetracker.firebaseio.com")),
@@ -59,6 +59,24 @@ angular.module('CourseServices', ['firebase'])
           callback(null, attendance);
         });
       });
+    }
+  }
+}])
+.factory('Alerts', [function() {
+  var alerts = [];
+
+  return {
+    clear: function() {
+      alerts = [];
+    },
+    add: function(type, msg) {
+      alerts.push({type: type, msg: msg});
+    },
+    get: function() {
+      return alerts;
+    },
+    remove: function(idx) {
+      alerts.splice(idx, 1);
     }
   }
 }])

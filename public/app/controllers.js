@@ -1,13 +1,23 @@
 angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'angularMoment'])
-.controller('AuthCtrl', ['$scope', 'Auth', function($scope, Auth) {
+.controller('AuthCtrl', ['$scope', 'Auth', 'Alerts', function($scope, Auth, Alerts) {
   $scope.auth = Auth;
+  $scope.alerts = Alerts;
 
   $scope.login = function() {
     Auth.login(function(err, user) {
-      if (err) return console.log('error');
-      console.log(user);
+      if (err) {
+        return console.log('error');
+        console.log(err);
+        $scope.alerts.add('danger', 'An error occurred!');
+      }
+      $scope.alerts.add('success', 'You are now logged in!');
     });
   };
+
+  $scope.logout = function() {
+    Auth.logout();
+    $scope.alerts.add('success', 'You are now logged out');
+  }
 }])
 .controller('DashboardCtrl', ['$scope', 'Students', function($scope, Students) {
   $scope.students = [];
@@ -19,10 +29,9 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
 }])
 .controller('AttendanceCtrl', ['$scope', '$filter', 'Students', 'Attendance', '$firebaseArray', function($scope, $filter, Students, Attendance, $firebaseArray) {
   $scope.currentDate = new Date();
-  $scope.formattedDate = $filter('date')($scope.currentDate, 'MM-dd-yyyy')
+  $scope.formattedDate = $filter('date')($scope.currentDate, 'MM-dd-yyyy');
   $scope.students = [];
   $scope.selectedCohort = 'WDI 04'
-
 
   Students.getCohort($scope.selectedCohort, function(err, students) {
     $scope.students = students;
@@ -39,8 +48,10 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
 
   var attendance = [];
   $scope.$watch('currentDate', function() {
+    $scope.formattedDate = $filter('date')($scope.currentDate, 'MM-dd-yyyy');
     attendance = $firebaseArray(Attendance.ref.child($scope.selectedCohort).child($scope.formattedDate));
   });
+
   $scope.attended = function(githubUsername) {
     var attendanceRecord = attendance.$getRecord(githubUsername)
     return attendanceRecord ? attendanceRecord.$value : false;
@@ -71,6 +82,7 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
     var cohort = {};
     cohort[$scope.newCohort.name] = $scope.newCohort;
     Cohorts.update(cohort);
+    $scope.alerts.add('success', 'You added ' + $scope.newCohort.name + ' as a new cohort');
     $scope.newCohort = { name: '', description: '' };
   };
 
@@ -84,9 +96,11 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
       var student = {};
       student[$scope.newStudent.githubUsername] = $scope.newStudent
       Students.ref.update(student);
+      $scope.alerts.add('success', 'You added ' + $scope.newStudent.firstName + ' as a new student');
       $scope.newStudent = { firstName: '', lastName: '', cohort: '' };
     }, function error(res) {
       console.log(res);
+      $scope.alerts.add('danger', 'An error occurred, try again! (or check console)');
     });
   };
 }])
