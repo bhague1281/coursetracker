@@ -21,16 +21,20 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
   });
   console.log('dashboard');
 }])
-.controller('AttendanceCtrl', ['$scope', 'Students', 'Attendance', function($scope, Students, Attendance) {
+.controller('AttendanceCtrl', ['$scope', '$filter', 'Students', 'Attendance', function($scope, $filter, Students, Attendance) {
   $scope.currentDate = new Date();
+  $filter('date')($scope.currentDate, 'MMddyyyy')
   $scope.students = [];
   $scope.attendance = ['thomasvaeth'];
   Students.getCohort('WDI 04', function(err, students) {
     $scope.students = students;
   });
 
-  $scope.toggleAttendance = function(student) {
-    Attendance
+  $scope.toggleAttendance = function(githubUsername) {
+    // Attendance
+    var obj = {};
+    obj[githubUsername] = true;
+    Attendance.ref.child($filter('date')($scope.currentDate, 'MM-dd-yyyy')).update(obj);
   }
 }])
 .controller('AdminIndexCtrl', ['$scope', 'Cohorts', 'Students', 'Auth', '$http', '$firebaseArray', function($scope, Cohorts, Students, Auth, $http, $firebaseArray) {

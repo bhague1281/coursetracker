@@ -8,7 +8,7 @@
 </form>
 
 <div class="row">
-  <div class="col-md-3 well" ng-repeat="student in students" ng-class="{attended: attendance.indexOf(student.githubUsername) > -1}" ng-click="toggleAttendance(student)">
+  <div class="col-sm-3 well attendance-well" ng-repeat="student in students" ng-class="{attended: attendance.indexOf(student.githubUsername) > -1}" ng-click="toggleAttendance(student.githubUsername)">
     <student-card student="student" show-cohort="false"></student-card>
   </div>
 </div>

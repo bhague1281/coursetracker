@@ -9,5 +9,9 @@
 }
 
 .avatar {
-  height: 100px;
+  width: 100px;
+}
+
+.attendance-well {
+  min-height: 260px;
 }
