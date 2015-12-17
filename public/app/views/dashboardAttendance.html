@@ -1,4 +1,4 @@
-<h1>{{selectedCohort}} - Attendance </h1>
+<h1>Attendance</h1>
 
 <p>
   Mark students <strong>green</strong> by pressing their face.
@@ -17,7 +17,8 @@
 </form>
 
 <div class="row">
-  <div class="col-sm-3 well attendance-well" ng-repeat="student in students" ng-class="{attended: attended(student.githubUsername)}" ng-click="toggleAttendance(student.githubUsername)">
+  <div class="col-sm-3 well attendance-well" ng-repeat="student in students" ng-class="{attended: attended(student.githubUsername)}">
     <student-card student="student" show-cohort="false"></student-card>
+    <a class="btn btn-success" ng-click="toggleAttendance(student.githubUsername)">Toggle Attendance</a>
   </div>
 </div>

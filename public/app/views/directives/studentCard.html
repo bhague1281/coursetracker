@@ -1,8 +1,9 @@
 <div>
-  <img class="avatar" ng-src="{{student.avatarUrl}}">
+  <img class="avatar" ng-src="{{student.avatarUrl}}" uib-tooltip="{{student.status.note}}">
   <h3>{{student.firstName}} {{student.lastName}} <small ng-show="showCohort">- {{student.cohort}}</small></h3>
-  <a href="https://www.github.com/{{student.githubUsername}}" target="_blank">
-    <i class="fa fa-github fa-2x"></i>
-  </a>
   <p ng-show="showNote">{{student.status.note}}</p>
+  <div class="btn-group btn-group-md" role="group" aria-label="student buttons">
+    <a type="button" class="btn btn-default" href="https://www.github.com/{{student.githubUsername}}" target="_blank"><i class="fa fa-github fa-1x"></i> Github</a>
+    <button ng-click="studentDetails()" type="button" class="btn btn-primary">Details</button>
+  </div>
 </div>

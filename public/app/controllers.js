@@ -20,13 +20,25 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
     $state.go('index');
   }
 }])
-.controller('DashboardCtrl', ['$scope', 'Students', function($scope, Students) {
+.controller('DashboardIndexCtrl', ['$scope', 'Students', function($scope, Students) {
   $scope.students = [];
-  $scope.selectedCohort = 'WDI 04'
+  $scope.selectedCohort = 'WDI 04';
 
   Students.getCohort($scope.selectedCohort, function(err, students) {
     $scope.students = students;
   });
+}])
+.controller('DashboardCtrl', ['$scope', '$state', function($scope, $state) {
+  $scope.selectedCohort = 'WDI 04';
+  $scope.tabs = [
+    {title: 'Dashboard', state: 'dashboard.index'},
+    {title: 'Attendance', state: 'dashboard.attendance'}
+  ];
+  $state.transitionTo($scope.tabs[0].state);
+
+  $scope.transition = function(state) {
+    $state.transitionTo(state);
+  };
 }])
 .controller('AttendanceCtrl', ['$scope', '$filter', 'Students', 'Attendance', '$firebaseArray', function($scope, $filter, Students, Attendance, $firebaseArray) {
   $scope.currentDate = new Date();

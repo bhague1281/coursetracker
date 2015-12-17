@@ -1,24 +1,7 @@
 <h1>{{selectedCohort}}</h1>
 
 <uib-tabset justified="true">
-  <uib-tab active="true" heading="Dashboard"></uib-tab>
-  <uib-tab heading="Attendance"><a href="/#/attendance" class="btn btn-primary">Attendance</a></uib-tab>
-  <uib-tab heading="Students"></uib-tab>
-  <uib-tab heading="Groups"></uib-tab>
+  <uib-tab ng-repeat="tab in tabs" heading="{{tab.title}}" ng-click="transition(tab.state)"></uib-tab>
 </uib-tabset>
 
-<h2>Students to Track</h2>
-<div class="row">
-  <div class="col-sm-3" ng-repeat="student in students | filter:{status: {track: 'true'}}">
-    <student-card student="student"
-                  show-cohort="false"
-                  show-note="true"></student-card>
-  </div>
-</div>
-<hr>
-<h2><a href="/#/attendance">Attendance</a></h2>
-<div class="row">
-  <div class="col-md-12">
-    <attendance-graph cohort="selectedCohort"></attendance-graph>
-  </div>
-</div>
+<div ui-view></div>

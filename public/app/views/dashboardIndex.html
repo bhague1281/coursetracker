@@ -1,0 +1,15 @@
+<h2>Students to Track</h2>
+<div class="row">
+  <div class="col-sm-3" ng-repeat="student in students | filter:{status: {track: 'true'}}">
+    <student-card student="student"
+                  show-cohort="false"
+                  show-note="true"></student-card>
+  </div>
+</div>
+<hr>
+<h2>Attendance</h2>
+<div class="row">
+  <div class="col-md-12">
+    <attendance-graph cohort="selectedCohort"></attendance-graph>
+  </div>
+</div>
