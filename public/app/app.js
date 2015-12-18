@@ -15,25 +15,21 @@ angular.module('CourseTracker', ['CourseCtrls', 'ui.router', 'ngAnimate'])
   })
   .state('dashboard', {
     url: '/dashboard',
-    templateUrl: 'app/views/dashboard.html',
+    templateUrl: 'app/views/dashboard/dashboard.html',
     controller: 'DashboardCtrl'
   })
   .state('dashboard.index', {
-    templateUrl: 'app/views/dashboardIndex.html',
+    templateUrl: 'app/views/dashboard/index.html',
     controller: 'DashboardIndexCtrl'
   })
   .state('dashboard.attendance', {
-    templateUrl: 'app/views/dashboardAttendance.html',
+    templateUrl: 'app/views/dashboard/attendance.html',
     controller: 'AttendanceCtrl'
   })
-  // .when('/', {
-  //   templateUrl: 'app/views/index.html',
-  //   controller: 'IndexCtrl'
-  // })
-  // .when('/admin', {
-  //   templateUrl: 'app/views/admin/index.html',
-  //   controller: 'AdminIndexCtrl'
-  // })
+  .state('dashboard.projects', {
+    templateUrl: 'app/views/dashboard/projects.html',
+    controller: 'ProjectsCtrl'
+  })
 
   // $locationProvider.html5Mode(false).hashPrefix('!');
 }])

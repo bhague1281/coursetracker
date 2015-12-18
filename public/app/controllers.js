@@ -20,6 +20,20 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
     $state.go('index');
   }
 }])
+
+.controller('DashboardCtrl', ['$scope', '$state', 'Auth', function($scope, $state, Auth) {
+  $scope.selectedCohort = Auth.getCurrentCohort();
+  $scope.tabs = [
+    {title: 'Dashboard', state: 'dashboard.index'},
+    {title: 'Attendance', state: 'dashboard.attendance'},
+    {title: 'Projects', state: 'dashboard.projects'}
+  ];
+  $state.transitionTo($scope.tabs[0].state);
+
+  $scope.transition = function(state) {
+    $state.transitionTo(state);
+  };
+}])
 .controller('DashboardIndexCtrl', ['$scope', 'Students', function($scope, Students) {
   $scope.students = [];
   $scope.selectedCohort = 'WDI 04';
@@ -28,23 +42,11 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
     $scope.students = students;
   });
 }])
-.controller('DashboardCtrl', ['$scope', '$state', function($scope, $state) {
-  $scope.selectedCohort = 'WDI 04';
-  $scope.tabs = [
-    {title: 'Dashboard', state: 'dashboard.index'},
-    {title: 'Attendance', state: 'dashboard.attendance'}
-  ];
-  $state.transitionTo($scope.tabs[0].state);
-
-  $scope.transition = function(state) {
-    $state.transitionTo(state);
-  };
-}])
-.controller('AttendanceCtrl', ['$scope', '$filter', 'Students', 'Attendance', '$firebaseArray', function($scope, $filter, Students, Attendance, $firebaseArray) {
+.controller('AttendanceCtrl', ['$scope', '$filter', 'Students', 'Attendance', '$firebaseArray', 'Auth', function($scope, $filter, Students, Attendance, $firebaseArray, Auth) {
   $scope.currentDate = new Date();
   $scope.formattedDate = $filter('date')($scope.currentDate, 'MM-dd-yyyy');
   $scope.students = [];
-  $scope.selectedCohort = 'WDI 04'
+  $scope.selectedCohort = Auth.getCurrentCohort();
 
   Students.getCohort($scope.selectedCohort, function(err, students) {
     $scope.students = students;
@@ -74,6 +76,17 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
     var attendanceRecord = attendance.$getRecord(githubUsername)
     return attendanceRecord ? attendanceRecord.$value : false;
   }
+}])
+.controller('ProjectsCtrl', ['$scope', 'Projects', 'Auth', function($scope, Projects, Auth) {
+  $scope.selectedCohort = Auth.getCurrentCohort();
+  Projects.add({
+    cohort: 'WDI 04',
+    githubUsername: 'thomasvaeth',
+    projectName: 'Samesies',
+    projectLink: 'http://samesies.herokuapp.com/',
+    projectIdentifier: '4'
+  });
+  console.log(Projects.get('thomasevaeth'));
 }])
 .controller('IndexCtrl', ['$state', 'Auth', function($state, Auth) {
   if (Auth.isLoggedIn()) $state.go('dashboard');

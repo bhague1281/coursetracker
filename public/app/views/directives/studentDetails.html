@@ -1,5 +1,39 @@
 <div>
-  <div class="modal-header">
-      <h3 class="modal-title">Student Details</h3>
+  <div class="modal-body">
+    <student-card student="student"></student-card>
+
+    <h3>Projects
+      <a ng-click="showProjectForm = !showProjectForm" class="btn btn-success pull-right">
+        <i class="fa fa-plus"></i>
+      </a>
+    </h3>
+    <div ng-show="showProjectForm">
+      <form ng-submit="addProject()">
+        <input type="text" class="hidden" ng-model="student.githubUsername">
+        <input type="text" class="hidden" ng-model="student.cohort">
+        <div class="form-group">
+          <label for="name">Project Name</label>
+          <input type="text" class="form-control" ng-model="newProject.name">
+        </div>
+        <div class="form-group">
+          <label for="project-link">Project Link</label>
+          <input id="projectLink" type="url" class="form-control" ng-model="newProject.projectLink">
+        </div>
+        <div class="form-group">
+          <label for="project-repo">Project Repo</label>
+          <input id="project-repo" type="url" class="form-control" ng-model="newProject.projectRepo">
+        </div>
+        <input type="submit" class="btn btn-primary">
+      </form>
+    </div>
+    <div class="row">
+      <div class="col-md-12" ng-repeat="project in student.projects">
+        {{project}}
+      </div>
+    </div>
+
+    <h3>Groups</h3>
+
+    <h3>Homework</h3>
   </div>
 </div>

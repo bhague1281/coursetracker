@@ -27,10 +27,32 @@ angular.module('CourseTrackerDirectives', ['chart.js', 'CourseServices', 'ui.boo
     }]
   }
 })
-.controller('StudentDetailsModal', ['$scope', '$uibModalInstance', 'student', 'Students', function($scope, $uibModalInstance, student, Students) {
-  $scope.student = student;
-  $scope.student.firstName = 'test';
-  console.log($scope.student);
+.controller('StudentDetailsModal', ['$scope', 'Projects', '$uibModalInstance', 'student', 'Students', function($scope, Projects, $uibModalInstance, student, Students) {
+  console.log(student);
+  $scope.showProjectForm = false;
+  console.log(Projects.get(student.githubUsername))
+  // console.log($scope.projects);
+  $scope.newProject = {
+    name: '',
+    cohort: student.cohort,
+    githubUsername: student.githubUsername,
+    projectLink: '',
+    projectRepo: ''
+  };
+
+  $scope.addProject = function() {
+    Projects.add($scope.newProject);
+    $scope.showProjectForm = false;
+    $scope.newProject = {
+      name: '',
+      cohort: student.cohort,
+      githubUsername: student.githubUsername,
+      projectLink: '',
+      projectRepo: ''
+    };
+  };
+
+  $scope.student = Students.studentObject(student.githubUsername);
 }])
 .directive('attendanceGraph', function() {
   return {
