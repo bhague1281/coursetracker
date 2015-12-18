@@ -34,9 +34,10 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
     $state.transitionTo(state);
   };
 }])
-.controller('DashboardIndexCtrl', ['$scope', 'Students', function($scope, Students) {
+.controller('DashboardIndexCtrl', ['$scope', 'Students', 'Cohorts', function($scope, Students, Cohorts) {
   $scope.students = [];
   $scope.selectedCohort = 'WDI 04';
+  $scope.cohort = Cohorts.getSelected();
 
   Students.getCohort($scope.selectedCohort, function(err, students) {
     $scope.students = students;

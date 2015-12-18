@@ -42,8 +42,13 @@ angular.module('CourseServices', ['firebase', 'ui.bootstrap'])
     }
   }
 }])
-.factory('Cohorts', [function() {
-  return new Firebase("https://coursetracker.firebaseio.com/cohorts");
+.factory('Cohorts', ['$firebaseObject', 'Auth', function($firebaseObject, Auth) {
+  return {
+    ref: new Firebase("https://coursetracker.firebaseio.com/cohorts"),
+    getSelected: function() {
+      return $firebaseObject(this.ref.child(Auth.getCurrentCohort()));
+    }
+  }
 }])
 .factory('Students', ['$timeout', '$firebaseObject', function($timeout, $firebaseObject) {
   return {

@@ -1,3 +1,18 @@
+<h2>Quick Links</h2>
+<div class="row">
+  <div class="col-md-12" ng-show="cohort.name">
+    <a ng-show="cohort.trelloUrl" ng-href="{{cohort.trelloUrl}}" target="_blank" class="btn btn-primary btn-lg">
+      <i class="fa fa-trello"></i> Trello Board
+    </a>
+    <a ng-show="cohort.notesUrl" ng-href="{{cohort.notesUrl}}" target="_blank" class="btn btn-primary btn-lg">
+      <i class="fa fa-github"></i> Notes
+    </a>
+    <a ng-show="cohort.homeworkUrl" ng-href="{{cohort.homeworkUrl}}" target="_blank" class="btn btn-primary btn-lg">
+      <i class="fa fa-github"></i> Homework
+    </a>
+  </div>
+</div>
+
 <h2>Students to Track</h2>
 <div class="row">
   <div class="col-sm-3" ng-repeat="student in students | filter:{status: {track: 'true'}}">
