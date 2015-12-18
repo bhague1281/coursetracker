@@ -41,17 +41,17 @@
     <nav class="navbar navbar-default" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+          <button type="button" class="navbar-toggle" ng-click="isCollapsed = !isCollapsed">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">CourseTracker</a>
+          <a class="navbar-brand" href="/">CourseTracker</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="navbar">
+        <div class="navbar-collapse" id="navbar" uib-collapse="!isCollapsed">
           <ul class="nav navbar-nav navbar-right" ng-show="auth.isLoggedIn()">
             <li><a>Hello {{auth.getCurrentUser().displayName}}</a></li>
             <li><a href="/#/admin">Admin</a></li>
