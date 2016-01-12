@@ -1,7 +1,12 @@
 angular.module('CourseServices', ['firebase', 'ui.bootstrap'])
-.factory('Auth', ['$window', '$firebaseAuth', 'Users', function($window, $firebaseAuth, Users) {
+
+.constant('config', {
+  firebaseUrl: 'https://coursetracker.firebaseio.com'
+})
+
+.factory('Auth', ['$window', '$firebaseAuth', 'Users', 'config', function($window, $firebaseAuth, Users, config) {
   return {
-    authObj: $firebaseAuth(new Firebase("https://coursetracker.firebaseio.com")),
+    authObj: $firebaseAuth(new Firebase(config.firebaseUrl)),
     //cohort information
     getUserCohort: function() {
       return $window.localStorage['user-cohort'];
@@ -42,17 +47,19 @@ angular.module('CourseServices', ['firebase', 'ui.bootstrap'])
     }
   }
 }])
-.factory('Cohorts', ['$firebaseObject', 'Auth', function($firebaseObject, Auth) {
+
+.factory('Cohorts', ['$firebaseObject', 'Auth', 'config', function($firebaseObject, Auth, config) {
   return {
-    ref: new Firebase("https://coursetracker.firebaseio.com/cohorts"),
+    ref: new Firebase(config.firebaseUrl + "/cohorts"),
     getSelected: function() {
       return $firebaseObject(this.ref.child(Auth.getUserCohort()));
     }
   }
 }])
-.factory('Students', ['$timeout', '$firebaseObject', function($timeout, $firebaseObject) {
+
+.factory('Students', ['$timeout', '$firebaseObject', 'config', function($timeout, $firebaseObject, config) {
   return {
-    ref: new Firebase("https://coursetracker.firebaseio.com/students"),
+    ref: new Firebase(config.firebaseUrl + "/students"),
     getCohort: function(cohortName, callback) {
       this.ref.orderByChild('cohort').startAt(cohortName).endAt(cohortName).on("value", function(snapshot) {
         $timeout(function() {
@@ -69,9 +76,10 @@ angular.module('CourseServices', ['firebase', 'ui.bootstrap'])
     }
   }
 }])
-.factory('Users', [function() {
+
+.factory('Users', ['config', function(config) {
   return {
-    ref: new Firebase("https://coursetracker.firebaseio.com/users"),
+    ref: new Firebase(config.firebaseUrl + "/users"),
     get: function(uid, callback) {
       this.ref.child(uid).once('value', function(userSnapshot) {
         callback(userSnapshot.val());
@@ -79,9 +87,10 @@ angular.module('CourseServices', ['firebase', 'ui.bootstrap'])
     }
   }
 }])
-.factory('Attendance', [function() {
+
+.factory('Attendance', ['config', function(config) {
   return {
-    ref: new Firebase("https://coursetracker.firebaseio.com/attendance"),
+    ref: new Firebase(config.firebaseUrl + "/attendance"),
     getAttendanceByDate: function(date, callback) {
       this.ref.orderByChild('date').startAt(date).endAt(date).on("value", function(snapshot) {
         $timeout(function() {
@@ -95,9 +104,10 @@ angular.module('CourseServices', ['firebase', 'ui.bootstrap'])
     }
   }
 }])
-.factory('Projects', ['$firebaseObject', function($firebaseObject) {
+
+.factory('Projects', ['$firebaseObject', 'config', function($firebaseObject, config) {
   return {
-    ref: new Firebase("https://coursetracker.firebaseio.com/projects"),
+    ref: new Firebase(config.firebaseUrl + "/projects"),
     get: function(githubUsername) {
       if (!githubUsername) return $firebaseObject(this.ref);
       return $firebaseObject(this.ref.child(githubUsername));
@@ -107,6 +117,7 @@ angular.module('CourseServices', ['firebase', 'ui.bootstrap'])
     }
   }
 }])
+
 .factory('Alerts', [function() {
   var alerts = [];
 
