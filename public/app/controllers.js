@@ -22,7 +22,7 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
 }])
 
 .controller('DashboardCtrl', ['$scope', '$state', 'Auth', function($scope, $state, Auth) {
-  $scope.selectedCohort = Auth.getCurrentCohort();
+  $scope.selectedCohort = Auth.getUserCohort();
   $scope.tabs = [
     {title: 'Dashboard', state: 'dashboard.index'},
     {title: 'Attendance', state: 'dashboard.attendance'},
@@ -46,8 +46,8 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
 .controller('AttendanceCtrl', ['$scope', '$filter', 'Students', 'Attendance', '$firebaseArray', 'Auth', function($scope, $filter, Students, Attendance, $firebaseArray, Auth) {
   $scope.currentDate = new Date();
   $scope.formattedDate = $filter('date')($scope.currentDate, 'MM-dd-yyyy');
+  $scope.selectedCohort = Auth.getUserCohort();
   $scope.students = [];
-  $scope.selectedCohort = Auth.getCurrentCohort();
 
   Students.getCohort($scope.selectedCohort, function(err, students) {
     $scope.students = students;
@@ -79,21 +79,13 @@ angular.module('CourseCtrls', ['CourseServices', 'CourseTrackerDirectives', 'ang
   }
 }])
 .controller('ProjectsCtrl', ['$scope', 'Projects', 'Auth', function($scope, Projects, Auth) {
-  $scope.selectedCohort = Auth.getCurrentCohort();
-  Projects.add({
-    cohort: 'WDI 04',
-    githubUsername: 'thomasvaeth',
-    projectName: 'Samesies',
-    projectLink: 'http://samesies.herokuapp.com/',
-    projectIdentifier: '4'
-  });
-  console.log(Projects.get('thomasevaeth'));
+  $scope.selectedCohort = Auth.getUserCohort();
 }])
 .controller('IndexCtrl', ['$state', 'Auth', function($state, Auth) {
   if (Auth.isLoggedIn()) $state.go('dashboard');
 }])
 .controller('AdminIndexCtrl', ['$scope', 'Cohorts', 'Students', 'Auth', '$http', '$firebaseArray', '$uibModal', function($scope, Cohorts, Students, Auth, $http, $firebaseArray, $uibModal) {
-  $scope.cohorts = $firebaseArray(Cohorts);
+  $scope.cohorts = $firebaseArray(Cohorts.ref);
   $scope.students = [];
   $scope.selectedCohort = false;
   $scope.newCohort = { name: '', description: '' };

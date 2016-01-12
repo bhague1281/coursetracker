@@ -3,7 +3,7 @@ angular.module('CourseServices', ['firebase', 'ui.bootstrap'])
   return {
     authObj: $firebaseAuth(new Firebase("https://coursetracker.firebaseio.com")),
     //cohort information
-    getCurrentCohort: function() {
+    getUserCohort: function() {
       return $window.localStorage['user-cohort'];
     },
     setCurrentCohort: function(cohort) {
@@ -46,7 +46,7 @@ angular.module('CourseServices', ['firebase', 'ui.bootstrap'])
   return {
     ref: new Firebase("https://coursetracker.firebaseio.com/cohorts"),
     getSelected: function() {
-      return $firebaseObject(this.ref.child(Auth.getCurrentCohort()));
+      return $firebaseObject(this.ref.child(Auth.getUserCohort()));
     }
   }
 }])
